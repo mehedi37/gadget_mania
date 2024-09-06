@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35201.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gadget_mania", "gadget_mania\gadget_mania.csproj", "{653A386E-7695-4431-863D-AA6AF1CBF7CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{653A386E-7695-4431-863D-AA6AF1CBF7CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{653A386E-7695-4431-863D-AA6AF1CBF7CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{653A386E-7695-4431-863D-AA6AF1CBF7CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{653A386E-7695-4431-863D-AA6AF1CBF7CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE00C408-4284-453E-8FA7-E983814B52FD}
+	EndGlobalSection
+EndGlobal

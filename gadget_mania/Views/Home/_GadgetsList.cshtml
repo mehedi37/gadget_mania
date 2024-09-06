@@ -1,0 +1,55 @@
+﻿@model IEnumerable<gadget_mania.Models.Products>
+
+<div class="row">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="col-md-12">
+            <h3 class="text-center">
+                <i class="bi bi-ban text-danger"></i>
+                No products found !
+            </h3>
+        </div>
+    }
+    else
+    {
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <a href="@Url.Action("GadgetDetails", "Home", new { id = product.ProductId })">
+                        <img src="@product.ProductImage" class="card-img-top" width="70" height="250" alt="@product.ProductName">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="@Url.Action("GadgetDetails", "Home", new { id = product.ProductId })">@product.ProductName</a>
+                        </h5>
+                        <p class="text-left">
+                            @{
+                                var maxLength = 150;
+                                var description = product.ProductDescription;
+                                if (description.Length > maxLength)
+                                {
+                                    description = description.Substring(0, maxLength) + "...";
+                                }
+                            }
+                            @description
+                        </p>
+                        <p class="card-text"><strong>@product.ProductPrice.ToString("C")</strong></p>
+                        @if (product.Stock > 0)
+                        {
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="productId" value="@product.ProductId" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn text-white" style="background-color: purple;">Add to Cart</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button class="btn btn-danger card-text" disabled>Stock Out</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

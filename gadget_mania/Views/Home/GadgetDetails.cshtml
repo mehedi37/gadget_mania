@@ -1,0 +1,54 @@
+﻿@model gadget_mania.ViewModels.ProductDetailsViewModel
+
+@{
+    ViewData["Title"] = "Gadget Details";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-2">
+            <img src="@Model.Product.ProductImage" class="img-fluid" alt="@Model.Product.ProductName">
+        </div>
+        <div class="col-md-6">
+            <h1>@Model.Product.ProductName</h1>
+            <p>@Model.Product.ProductDescription</p>
+            <p><strong>Price: </strong>@Model.Product.ProductPrice.ToString("C")</p>
+            @if (Model.Product.Stock == 0)
+            {
+                <p class="text-danger"><strong>Stock: </strong>Stock Out</p>
+            }
+            else
+            {
+                <p><strong>Stock: </strong>@Model.Product.Stock</p>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                    <div class="form-group col-md-2">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" name="quantity" class="form-control" value="1" min="1" />
+                    </div>
+                    <button type="submit" class="btn text-white mt-2" style="background-color: purple;">Add to Cart</button>
+                </form>
+            }
+        </div>
+    </div>
+    <hr>
+    <h3>Other Products</h3>
+    <div class="row">
+        @foreach (var product in Model.OtherProducts)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img src="@product.ProductImage" class="card-img-top" alt="@product.ProductName">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text">
+                            @product.ProductDescription
+                        </p>
+                        <p class="card-text"><strong>@product.ProductPrice.ToString("C")</strong></p>
+                        <a href="@Url.Action("GadgetDetails", "Home", new { id = product.ProductId })" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

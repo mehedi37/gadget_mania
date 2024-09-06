@@ -1,0 +1,100 @@
+﻿@model gadget_mania.ViewModels.SellerViewModel
+
+@{
+    ViewData["Title"] = "My Shop";
+}
+
+<h1 class="text-center my-4">@ViewData["Title"]</h1>
+<hr/>
+
+<div class="row">
+    <div class="col-12 justify-content-center">
+        <ul class="nav nav-pills justify-content-center" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="items-tab" data-bs-toggle="tab" data-bs-target="#items" type="button" role="tab" aria-controls="items" aria-selected="true">My Gadgets</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab" aria-controls="customers" aria-selected="false">My Customers</button>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-center text-center" id="items" role="tabpanel" aria-labelledby="items-tab">
+                <table class="table table-hover mt-3">
+                    <thead class="table-secondary rounded">
+                        <tr>
+                            <th>Image</th>
+                            <th>Item Name</th>
+                            <th>Item Stock</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ItemsForSale)
+                        {
+                            <tr>
+                                <td><img src="@item.ProductImage" alt="@item.ProductName" class="img-thumbnail" style="max-width: 100px;" /></td>
+                                <td>@item.ProductName</td>
+                                <td>
+                                    @if (item.Stock > 0)
+                                    {
+                                        <span class="text-dark">@item.Stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">Out of Stock</span>
+                                    }
+                                </td>
+                                <td>@item.ProductPrice.ToString("C")</td>
+                                <td>
+                                    <a asp-action="EditGadgets" asp-route-id="@item.ProductId" class="btn btn-sm text-white" style="background-color: purple;">Edit</a>
+                                    <form asp-controller="Sell" asp-action="DeleteItem" asp-route-id="@item.ProductId" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="text-center mt-3">
+                    <a asp-controller="Sell" asp-action="AddGadgets" class="btn text-white" style="background-color: purple;">Add New Item</a>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                <table class="table table-hover mt-3">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Total Spent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var customer in Model.Customers)
+                        {
+                            <tr>
+                                <td>@customer.CustomerName</td>
+                                <td>@customer.TotalSpent.ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var triggerTabList = [].slice.call(document.querySelectorAll('#myTab button'))
+        triggerTabList.forEach(function (triggerEl) {
+            var tabTrigger = new bootstrap.Tab(triggerEl)
+
+            triggerEl.addEventListener('click', function (event) {
+                event.preventDefault()
+                tabTrigger.show()
+            })
+        }) 
+    </script>
+}

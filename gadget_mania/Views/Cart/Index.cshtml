@@ -1,0 +1,97 @@
+﻿@model gadget_mania.ViewModels.CartViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model == null || Model.CartDetails.Count == 0)
+{
+    <p>
+        No item in the cart.
+        <a asp-action="Index" asp-controller="Home">Go to Store</a>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartDetails)
+            {
+                <tr>
+                    <td>@item.Products?.ProductName</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="UpdateCart" method="post" class="d-inline">
+                            <input type="hidden" name="cartDetailsId" value="@item.CartDetailsId" />
+                            <button type="button" class="btn btn-primary" onclick="updateQuantity(@item.CartDetailsId, @item.Quantity - 1)">-</button>
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control d-inline w-auto" onchange="updateQuantity(@item.CartDetailsId, this.value)" />
+                            <button type="button" class="btn btn-primary" onclick="updateQuantity(@item.CartDetailsId, @item.Quantity + 1)">+</button>
+                        </form>
+                    </td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        @{
+                            var total_price = item.Price * item.Quantity;
+                        }
+                        @total_price.ToString("C")
+                    </td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
+                            <input type="hidden" name="cartDetailsId" value="@item.CartDetailsId" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h3>Total: @Model.TotalPrice.ToString("C")</h3>
+
+    <div class="row justify-content-start">
+        <div class="col-md-1">
+            <form asp-action="Purchase" method="post">
+                <button type="submit" class="btn btn-primary">Purchase</button>
+            </form>
+        </div>
+        <div class="col-md-2">
+            <form asp-action="ClearCart" method="post">
+                <button type="submit" class="btn btn-warning">Empty Cart</button>
+            </form>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function updateQuantity(cartDetailsId, quantity) {
+            if (quantity < 1) {
+                quantity = 1;
+            }
+            var form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/Cart/UpdateCart';
+            var inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'cartDetailsId';
+            inputId.value = cartDetailsId;
+            var inputQuantity = document.createElement('input');
+            inputQuantity.type = 'hidden';
+            inputQuantity.name = 'quantity';
+            inputQuantity.value = quantity;
+            form.appendChild(inputId);
+            form.appendChild(inputQuantity);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+}
